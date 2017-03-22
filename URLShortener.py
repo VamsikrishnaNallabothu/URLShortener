@@ -67,6 +67,7 @@ def encode(integer, base=BASE_LIST):
     return ret
 
 
+# shorten urls and store 'em in database
 @app.route('/', methods=['GET', 'POST'])
 def url_shortener():
     form = URLEntryForm()
@@ -91,15 +92,15 @@ def url_shortener():
             return render_template('home.html', short_url=host + encoded_string)
     return render_template('home.html', form=form)
 
-
+# for redirecting to the original URL
 @app.route('/<short_url>')
 def use_short_url(short_url):
     decoded_string = decode(short_url)
-
     redirect_url = 'http://localhost:5000'
     short = WebUrl.query.filter_by(ID=decoded_string).first()
     return redirect(short.URL)
 
+
+
 if __name__ == '__main__':
-    # This code checks whether database table is created or not
     app.run(debug=True)
